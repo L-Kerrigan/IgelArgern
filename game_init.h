@@ -1,10 +1,3 @@
-
-/* 
- * File:   game_init.h
- *
- * Created on 08 March 2019, 11:54
- */
-
 #ifndef GAME_INIT_H
 #define GAME_INIT_H
 
@@ -20,14 +13,7 @@ extern "C" {
 #endif
 
 #endif /* GAME_INIT_H */
-
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
  * File:   newfile.h
  * Author: lpasqua
  *
@@ -52,7 +38,7 @@ enum color {
     RED, BLU, GREEN, YELLOW, PINK, ORANGE
 };
 
-//defines a token. 
+//defines a token.
 //Note each token can be associated with a color
 
 typedef struct token {
@@ -70,11 +56,14 @@ typedef struct square {
     int tokensOnSquare;
 } square;
 
-/*
- * You need to fill this data structure
- * with the information about the player
- * such as a name and a color.
- */
+struct stack{
+    enum color col;
+    //To implement later: number of tokens on the square for this stack
+    //Relate this stack to squareSelected
+    struct stack *next;
+}stack;
+
+
 typedef struct player {
     char name[30];
     enum color col;
@@ -84,7 +73,7 @@ typedef struct player {
 
 /*
  * This function creates the board for the first time
- * 
+ *
  * Input: board - a 6x9 array of squares
  *
  */
@@ -92,7 +81,7 @@ void initialize_board(square board[NUM_ROWS][NUM_COLUMNS]);
 
 /*
  * This function creates players for the first time
- * 
+ *
  * Input: the array of players to be initialized
  * Output: The number of players of the game
  *
