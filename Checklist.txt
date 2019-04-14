@@ -1,0 +1,44 @@
+Check list for the game:
+
+ - Initialise the board.
+ Obstacle square positions already decided.
+ We need to implement what the obstacle squares actually do, eg. token on the obstacle square can't move forward until all oher tokens have passed it.
+ We also need to get rid of the effects of the obstacle square once all the tokens have passed it so the tokens on the obstacle sqaure can move forward again.
+ 
+ - Display the board - (Done)
+ This was given to us in Liliana's code. It also marks specific places for the obstacle squares to be with an "X"
+ 
+ - Initialise (create) the players -(Done, to be checked)
+ I have made a function to gather a name of each player and count the number of players entered.
+ This function returns the number of players entered to the main where it is then assigned to the variable "numOfPlayers".
+ As I've said, I haven't tested if this function completely works yet.
+ 
+ - Initialise struct for tokens -(Done, to be checked)
+ This struct just enumerates a colour to a variable called "col".
+ I need to try understand exactly what this struct does, aside from represent each token colour using numbers.
+ 
+ - Make a function to allow players to place tokens at start of game (Done, to be checked)
+ I've also completed this function, but I got a lot of help from the slides so we may have to change it a bit later if we have time.
+ Over half is my own code though, so it should be fine.
+ Again, I need to check if it works.
+ 
+ - Make a function to play the game
+ I suggest we split up this function into pieces because it looks like it could get very big very quickly. Doing this might also just make it easier to read.
+ I've started implementing it, but it needs to be changed and completed.
+ 
+ - Enter the functions into the libraries
+ Basically this is movingthe functions from the c files to the libraries so that when they're called, all you have to do is write "function();" like you would for "printf"
+ Make sure to add "#include libraryName" when you're running the code after, or the complier won't be able to find the functions and just give errors.
+ 
+ - Implement stack for tokens and make use of LIFO principle that it works on so the token on top is the only one that can move.
+ I've made a basic attempt at this, but I need to understand how it mingles with the board system.
+ It might have to be initialised as an array of stacks, one for each square.
+ If we really can't understand how to get this working, we could use an array, but we might lose marks for that.
+ 
+ - Edit main to put it all together -(Kinda done?)
+ There are some function calls in here already to start the process, but as we make our own functions we will need to add them here in the correct order.
+ 
+ 
+ 
+ I will add or take away things from this if I think of them, but for now this is it. We need to organise who is doing what, and do research if we're not sure how to implement something.
+ Maybe mark what you're attempting to do here so we don't do the same things?
