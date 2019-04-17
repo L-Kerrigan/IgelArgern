@@ -43,6 +43,7 @@ enum color {
 
 typedef struct token {
     enum color col;
+    token *next;
 } token;
 
 //Defines a square of the board.
