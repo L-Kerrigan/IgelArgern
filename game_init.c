@@ -36,15 +36,15 @@ void initialize_board(square board[NUM_ROWS][NUM_COLUMNS]) {
 *
 */
 int initialize_players(player players[]) {
-  int i = 0;
-  while (i < 6) {
-    printf("%s", "Input the next Player's name: \n"); //Inputting each Facebook user
+  int i, ans;
+
+  printf("How many players are there? \n"); //Can't figure out how to use the same method for counting players as used in the facebook project due to the presence of structs
+  scanf(" %d%*c", &ans); //This will do for now. The %*c just gets rid of the newline character without assigning it anywhere
+
+  for (i=0;i<ans;i++) {
+    printf("%s", "Input the next Player's name: \n"); //Inputting each player's name
     fgets(players[i].name,30,stdin);
-    //Checks whether a carriage return symbol was provided as input
-    if (players[i].name == "\n"){
-      break;
-    }
-    i++;
+    players[i].col=i; //Assigning each player a colour(?)
   }
-  return i;
+  return ans;
 }
