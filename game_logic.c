@@ -73,23 +73,33 @@ void print_board(square board[NUM_ROWS][NUM_COLUMNS]) {
 void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
   //Minimum number of tokens placed on a square in the first column of the board
   int minTokens = 0;
-  int squareSelected = 0;
+  int squareSelected = 0; //Variable to hold the number of thhe square selected by the user
   int i, j; //Counters
 
   for (i = 0; i < 4; i++) { //These loops ensure that each player places all their tokens on the board
     for (j = 0; j < numPlayers; j++) {
-      printf("Player %d please choose a square.\n", j);
-      scanf("%d", &squareSelected); //Asks where the player wants to place their next token
+      printf("Player %d please choose a square.\n", j+1);
+      scanf(" %d", &squareSelected); //Asks where the player wants to place their next token
 
-      if (squareSelected == minTokens && squareSelected != players[j].col) { //The following instructions add a token to a square.
-        //If there's a token already there it will be overwritten. This needs to be changed later
-        board[squareSelected][0].stack = (token *) malloc(sizeof (token));
-        board[squareSelected][0].stack->col = players[j].col;
-        board[squareSelected][0].tokensOnSquare++;
+      if(squareSelected<0 || squareSelected>=6){
+        printf("That square isn't on the board. Pick again. \n");
+        j--;
+      }
+      else{
+        if (board[squareSelected][0].tokensOnSquare==minTokens && squareSelected != players[j].col) { //The following instructions add a token to a square.
+          //If there's a token already there it will be overwritten. This needs to be changed later
+          board[squareSelected][0].stack = (token *) malloc(sizeof (token));
+          board[squareSelected][0].stack->col = players[j].col;
+          board[squareSelected][0].tokensOnSquare++;
 
-        //Updates the minimum number of tokens every time a multiple of 6 tokens has been placed in the first col
-        if (((numPlayers * i) + j + 1) % NUM_ROWS == 0) {
-          minTokens++;
+          //Updates the minimum number of tokens every time a multiple of (the number of players) tokens has been placed in the first col
+          if (((numPlayers * i) + j + 1) % NUM_ROWS == 0) {
+            minTokens++;
+          }
+        }
+        else{
+          printf("That square has more than the minimum number of tokens, or there's a token of your colour already there. Pick again. \n");
+          j--;
         }
       }
     }
@@ -124,49 +134,49 @@ void chooseToken(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numP
     else if(board[tileNum][dice].type==OBSTACLE){ //Need to check if the tile the token is on is an obstacle, not the future position!!
       obstacleSquares(board[tileNum][dice]);
     }
-  char ans;
-  printf("Will you move your token up or down? Enter Y or N.\n");
-  scanf("%c", &ans);
-  if (ans == 'Y' || ans == 'y') {
-    char move;
-    printf("Press U for up or D for down.\n");
-    scanf("%c", &move);
-    if (move == 'U' || move == 'u') {
-      //Do we need to display where the token goes here? Or just move it?
-      //This is just the code to move it
-      if(tileNum=0){
-        printf("Sorry, you can't move this token further up.\n");
-        //Need to add something that asks the question again. Or just leave it and let them move forward
+    char ans;
+    printf("Will you move your token up or down? Enter Y or N.\n");
+    scanf("%c", &ans);
+    if (ans == 'Y' || ans == 'y') {
+      char move;
+      printf("Press U for up or D for down.\n");
+      scanf("%c", &move);
+      if (move == 'U' || move == 'u') {
+        //Do we need to display where the token goes here? Or just move it?
+        //This is just the code to move it
+        if(tileNum=0){
+          printf("Sorry, you can't move this token further up.\n");
+          //Need to add something that asks the question again. Or just leave it and let them move forward
+        }
+        else{
+          tileNum-1;
+        }
       }
-      else{
-        tileNum-1;
+      else if (move == 'D' || move == 'd') {
+        if(tileNum=6){
+          printf("Sorry, you can't move this token further down.\n");
+          //Need to add something that asks the question again. Or just leave it and let them move forward
+        }
+        else{
+          tileNum+1;
+        }
+        //Do we need to display where the token goes here? Or just move it?
+        //This is just the code to move it
       }
+      board[tileNum][dice].stack = (token *) malloc(sizeof (token));
+      board[tileNum][dice].stack->col = players[i].col; //This will not work. Figure out how to implement stack properly
+      board[tileNum][dice].tokensOnSquare++; //Player also may not choose their own colour ^^
     }
-    else if (move == 'D' || move == 'd') {
-      if(tileNum=6){
-        printf("Sorry, you can't move this token further down.\n");
-        //Need to add something that asks the question again. Or just leave it and let them move forward
-      }
-      else{
-        tileNum+1;
-      }
-      //Do we need to display where the token goes here? Or just move it?
-      //This is just the code to move it
+    else if (ans == 'N' || ans == 'n') {
+      board[tileNum][dice].stack = (token *) malloc(sizeof (token));
+      board[tileNum][dice].stack->col = players[i].col; //This will not work. Figure out how to implement stack properly
+      board[tileNum][dice].tokensOnSquare++;  //Player also may not choose their own colour ^^
     }
-    board[tileNum][dice].stack = (token *) malloc(sizeof (token));
-    board[tileNum][dice].stack->col = players[i].col; //This will not work. Figure out how to implement stack properly
-    board[tileNum][dice].tokensOnSquare++; //Player also may not choose their own colour ^^
+    else{
+      printf("Invalid answer. \n");
+    }
+    print_board(board);
   }
-  else if (ans == 'N' || ans == 'n') {
-    board[tileNum][dice].stack = (token *) malloc(sizeof (token));
-    board[tileNum][dice].stack->col = players[i].col; //This will not work. Figure out how to implement stack properly
-    board[tileNum][dice].tokensOnSquare++;  //Player also may not choose their own colour ^^
-  }
-  else{
-    printf("Invalid answer. \n");
-  }
-  print_board(board);
-}
 }
 
 //Divide this function up:
