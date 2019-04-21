@@ -1,4 +1,4 @@
-Updated 16/04/19 - Check list for the game:
+Updated 21/04/19 - Check list for the game:
 
  - Initialise the board - (Done)
  Obstacle square positions already decided.
@@ -6,19 +6,18 @@ Updated 16/04/19 - Check list for the game:
  - Display the board - (Done)
  This was given to us in Liliana's code. It also marks specific places for the obstacle squares to be with an "X"
 
- - Initialise (create) the players -(Done, to be checked)
- I have made a function to gather a name of each player and count the number of players entered.
- This function returns the number of players entered to the main where it is then assigned to the variable "numOfPlayers".
- As I've said, I haven't tested if this function completely works yet.
+ - Initialise (create) the players -(Done, could be more efficient)
+ I have made a function to gather a name of each player, assign them each a colour and take in the number of players entered.
+ This function returns the number of players to the main where it is then assigned to the variable "numOfPlayers".
 
- - Initialise struct for tokens -(Done, to be checked)
+ - Initialise struct for tokens -(Done (I think))
  This struct just enumerates a colour to a variable called "col".
  I need to try understand exactly what this struct does, aside from represent each token colour using numbers.
 
- - Make a function to allow players to place tokens at start of game (Done, to be checked)
- I've also completed this function, but I got a lot of help from the slides so we may have to change it a bit later if we have time.
+ - Make a function to allow players to place tokens at start of game (Not completed)
+ I got a lot of help from the slides for this so we may have to change it a bit later if we have time.
  Over half is my own code though, so it should be fine.
- Again, I need to check if it works.
+ It works, but still lets the player place their own tokens on top of each other which shouldn't be allowed to happen
 
  - Make a function to play the game (Lucy is doing this)
  I suggest we split up this function into pieces because it looks like it could get very big very quickly. Doing this might also just make it easier to read.
@@ -26,13 +25,13 @@ Updated 16/04/19 - Check list for the game:
  We need to implement what the obstacle squares actually do, eg. token on the obstacle square can't move forward until all other tokens have passed it.
  We also need to get rid of the effects of the obstacle square once all the tokens have passed it so the tokens on the obstacle square can move forward again.
 
- - Enter the functions into the libraries
+ - Enter the functions into the libraries (Done)
  Basically this is moving the functions from the c files to the libraries so that when they're called, all you have to do is write "function();" like you would for "printf"
  Make sure to add "#include libraryName" when you're running the code after, or the complier won't be able to find the functions and just give errors.
 
  - Implement stack for tokens and make use of LIFO principle that it works on so the token on top is the only one that can move.
  I've made a basic attempt at this, but I need to understand how it mingles with the board system.
- It might have to be initialised as an array of stacks, one for each square.
+ It's initialised as an array of stacks, one for each square of the board.
  If we really can't understand how to get this working, we could use an array, but we might lose marks for that.
 
  - Edit main to put it all together -(Kinda done? Can't really be 100% finished until we've created all the other functions)
