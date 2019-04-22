@@ -1,47 +1,45 @@
-Updated 21/04/19 - Check list for the game:
+Updated 23/04/19 - Check list for the game:
 
- - Initialise the board - (Done)
+ - Initialise the board -(Done)
  Obstacle square positions already decided.
 
- - Display the board - (Done)
+ - Display the board -(Done)
  This was given to us in Liliana's code. It also marks specific places for the obstacle squares to be with an "X"
 
  - Initialise (create) the players -(Done, could be more efficient)
  I have made a function to gather a name of each player, assign them each a colour and take in the number of players entered.
  This function returns the number of players to the main where it is then assigned to the variable "numOfPlayers".
 
- - Initialise struct for tokens -(Done (I think))
+ - Initialise struct for tokens -(Done)
  This struct just enumerates a colour to a variable called "col".
- I need to try understand exactly what this struct does, aside from represent each token colour using numbers.
+
+ - Add push/pop functions for the stack -(Done, not 100% correct)
+ These functions will be used to add/take away tokens from each square as they move
+ Currently the stack allows movement from the bottom of the stack not the top
+ This is the opposite of what we want it to do
 
  - Make a function to allow players to place tokens at start of game (Not completed)
  I got a lot of help from the slides for this so we may have to change it a bit later if we have time.
  Over half is my own code though, so it should be fine.
  It works, but still lets the player place their own tokens on top of each other which shouldn't be allowed to happen
 
- - Make a function to play the game (Lucy is doing this)
+ - Make a function to play the game -(Lucy is doing this)
  I suggest we split up this function into pieces because it looks like it could get very big very quickly. Doing this might also just make it easier to read.
  I've started implementing it, but it needs to be changed and completed.
  We need to implement what the obstacle squares actually do, eg. token on the obstacle square can't move forward until all other tokens have passed it.
  We also need to get rid of the effects of the obstacle square once all the tokens have passed it so the tokens on the obstacle square can move forward again.
 
- - Enter the functions into the libraries (Done)
+ - Enter the functions into the libraries -(Done)
  Basically this is moving the functions from the c files to the libraries so that when they're called, all you have to do is write "function();" like you would for "printf"
  Make sure to add "#include libraryName" when you're running the code after, or the complier won't be able to find the functions and just give errors.
 
- - Implement stack for tokens and make use of LIFO principle that it works on so the token on top is the only one that can move.
- I've made a basic attempt at this, but I need to understand how it mingles with the board system.
- It's initialised as an array of stacks, one for each square of the board.
- If we really can't understand how to get this working, we could use an array, but we might lose marks for that.
-
- - Edit main to put it all together -(Kinda done? Can't really be 100% finished until we've created all the other functions)
+ - Edit main to put it all together -(Mostly done. Can't really be 100% finished until we've created all the other functions)
  There are some function calls in here already to start the process, but as we make our own functions we will need to add them here in the correct order.
 
- - Implement the function to announce the winner (Christelle is doing this)
+ - Implement the function to announce the winner -(Christelle is doing this)
  This should keep track of how many tokens of each colour arrive at the far side of the board.
  Once 3 tokens of the same colour reach the same side of the board, announce the player whose colour that is as the winner.
 
 
-
- I will add or take away things from this if I think of them, but for now this is it. We need to organise who is doing what, and do research if we're not sure how to implement something.
- Maybe mark what you're attempting to do here so we don't do the same things?
+ I will add or take away things from this if I think of them, but for now this is it.
+ Mark what you're attempting to do here so we don't do the same things.
