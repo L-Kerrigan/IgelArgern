@@ -50,7 +50,7 @@ void print_board(square board[NUM_ROWS][NUM_COLUMNS]);
 void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers);
 
 
-
+int pop(tokenPtr *sPtr, int value);
 /*
 *  * Manages the logic of the game
 *
@@ -59,7 +59,7 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
 *        numPlayers - the number of players
 */
 
-void chooseToken(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers);
+void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers);
 
 
 /*The function to be called whenever a token lands on its destination. It will check if said square is an obstacle,
