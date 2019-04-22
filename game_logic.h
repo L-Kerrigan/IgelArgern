@@ -67,4 +67,4 @@ and if it is, it will take action. If not, nothing happens. */
 /*Maybe make this return a true/false value depending on whether the token can move,
 Then call the moveToken function in the play_game function if that token can be moved etc. */
 
-int obstacleSquares(square singleSquare);
+int obstacleSquares(square board[NUM_ROWS][NUM_COLUMNS], int rows, int columns);
