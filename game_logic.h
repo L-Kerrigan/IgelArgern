@@ -28,6 +28,10 @@ extern "C" {
 * Output: initial of the color of the token
 *
 */
+int isEmpty(tokenPtr sPtr);
+int push(tokenPtr *sPtr, int value);
+int pop(tokenPtr *sPtr, int value);
+
 char print_token(token *t);
 
 
@@ -49,8 +53,6 @@ void print_board(square board[NUM_ROWS][NUM_COLUMNS]);
 */
 void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers);
 
-
-int pop(tokenPtr *sPtr, int value);
 /*
 *  * Manages the logic of the game
 *
