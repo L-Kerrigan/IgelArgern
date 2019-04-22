@@ -4,6 +4,67 @@
 #include <stdlib.h> //These 2 libraries are to randomise numbers for a dice roll
 #include <time.h>
 
+
+//Just to check if list is empty
+int isEmpty(tokenPtr sPtr){
+  return sPtr == NULL;
+}
+
+int push(tokenPtr *sPtr, int value){
+  tokenPtr newPtr = malloc(sizeof(token)); //Creating a new token
+  if(newPtr!=NULL){ //Checking if space is available for the new value
+    newPtr->col=value; //Placing the colour in the new token
+    newPtr->next=NULL; //There is currently no next element in the stack
+    tokenPtr prevPtr=NULL; //Points to previous token in stack
+    tokenPtr currPtr=*sPtr; //Points to current token in stack
+
+    //Loop to find the correct position in the list. This needs to be edited
+    while(currPtr!=NULL){
+      prevPtr=currPtr;
+      currPtr=currPtr->next;
+    }
+
+    //This is for inserting a new element at the beginning of the stack
+    if(prevPtr==NULL){ //Isn't this the part we need for only entering things in the top of the stack
+      newPtr->next=*sPtr;
+      *sPtr=newPtr;
+    }
+    else{ //Insert new node between current pointer and previous pointer
+      prevPtr->next=newPtr;
+      newPtr->next=currPtr;
+    }
+  }
+  else{ //If something goes wrong with memory allocation
+    printf("%d not inserted. No memory was made available. \n", value);
+  }
+}
+//The pop function also deletes all tokens of the same colour currently in the stack
+//Function to pop elements of stack. Inefficient but I can't figure out a better way right now
+int pop (tokenPtr *sPtr, int value){
+  if(value == (*sPtr)->col){
+    tokenPtr tempPtr = *sPtr;
+    *sPtr = (*sPtr)->next;
+    free(tempPtr);
+  }
+  else{
+    tokenPtr prevPtr = *sPtr;
+    tokenPtr currPtr = (*sPtr)->next;
+
+    while(currPtr!=NULL && currPtr->col!=value){
+      prevPtr = currPtr;
+      currPtr = currPtr->next;
+    }
+    if(currPtr!=NULL){
+      tokenPtr tempPtr = currPtr;
+      prevPtr->next=currPtr->next;
+      return value;
+    }
+  }
+
+  return '\0';
+}
+
+
 /*
 * Returns the first letter associated with the color of the token
 *
@@ -73,7 +134,7 @@ void print_board(square board[NUM_ROWS][NUM_COLUMNS]) {
 void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
   //Minimum number of tokens placed on a square in the first column of the board
   int minTokens = 0;
-  int squareSelected = 0; //Variable to hold the number of thhe square selected by the user
+  int squareSelected = 0; //Variable to hold the number of the square selected by the user
   int i, j; //Counters
 
   for (i = 0; i < 4; i++) { //These loops ensure that each player places all their tokens on the board
@@ -86,10 +147,9 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
         j--;
       }
       else{
-        if (board[squareSelected][0].tokensOnSquare==minTokens && squareSelected != players[j].col) { //The following instructions add a token to a square.
+        if (board[squareSelected][0].tokensOnSquare==minTokens && board[squareSelected][0].stack->col != players[j].col) { //The following instructions add a token to a square.
           //If there's a token already there it will be overwritten. This needs to be changed later
-          board[squareSelected][0].stack = (token *) malloc(sizeof (token));
-          board[squareSelected][0].stack->col = players[j].col;
+          push(&(board[squareSelected][0].stack), players[j].col);
           board[squareSelected][0].tokensOnSquare++;
 
           //Updates the minimum number of tokens every time a multiple of (the number of players) tokens has been placed in the first col
@@ -104,33 +164,9 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
       }
     }
   }
+  print_board(board);
 }
 
-
-//Function to pop elements of stack. Inefficient but I can't figure out a better way right now
-int pop (tokenPtr *sPtr, int value){
-  if(value == (*sPtr)->col){
-    tokenPtr tempPtr = *sPtr;
-    *sPtr = (*sPtr)->next;
-    free(tempPtr);
-  }
-  else{
-    tokenPtr prevPtr = *sPtr;
-    tokenPtr currPtr = (*sPtr)->next;
-
-    while(currPtr!=NULL && currPtr->col!=value){
-      prevPtr = currPtr;
-      currPtr = currPtr->next;
-    }
-    if(currPtr!=NULL){
-      tokenPtr tempPtr = currPtr;
-      prevPtr->next=currPtr->next;
-      return value;
-    }
-  }
-
-  return '\0';
-}
 /*
 *  * Manages the logic of the game
 *
