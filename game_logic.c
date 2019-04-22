@@ -157,8 +157,8 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
         printf("There are no tokens on this square. Choose again. \n"); //Roll again?
         i--; //Need to find a way to ask the question again. This method could be used for cheating
       }
-      else if(board[dice][tileNum].type==OBSTACLE && (obstacleSquares(board[dice][tileNum])==0)){ //Need to check if the tile the token is on is an obstacle, not the future position!!
-        printf("Sorry, you miss a turn!\n\n"); //Is this right?
+      else if(board[dice][tileNum].type==OBSTACLE && (obstacleSquares(board, dice, tileNum)!=0)){ //Need to check if the tile the token is on is an obstacle, not the future position!!
+        printf("Sorry, you miss a turn!\n\n");
       }
       else{
         char ans;
@@ -259,21 +259,26 @@ moveToken(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers)
 and if it is, it will take action. If not, nothing happens. */
 /*Maybe make this return a true/false value depending on whether the token can move,
 Then call the moveToken function in the play_game function if that token can be moved etc. */
-int obstacleSquares(square singleSquare){
-  for(int a=0;a<6;a++){
-    for(int b=0;b<9;b++){
-      if((singleSquare.tokensOnSquare)>0){
+int obstacleSquares(square board[NUM_ROWS][NUM_COLUMNS], int rows, int columns){ //This function needs fixing
+  int ret=0;
+  for(int a=0;a<rows;a++){
+    for(int b=0;b<columns;b++){
+      if((board[a][b].tokensOnSquare)>0){
         //Implement something that says they can't move this token
-        printf("You can't move this token yet. It's on an obstacle square.\n");
         //Call function to choose another token
-        return 1; //1=The square is an active obstacle square. Token can't be moved
+        ret++; //1=The square is an active obstacle square. Token can't be moved
         //Currently this just starts from the beginning.
         //It needs to give the option for the same player to choose another token. Make a new function?
       }
-      else{
-        printf("There are no tokens behind this one, so it can now move.\n");
-        return 0; //0=The square is no longer an active obstacle square. Token can be moved
-      }
     }
   }
+  if(ret!=0){
+    printf("You can't move this token yet. It's on an obstacle square.\n");
+  }
+  else if(ret==0){
+    printf("There are no tokens behind this one, so it can now move.\n");
+    board[rows][columns].type = NORMAL; //Changes the obstacle square to a normal
+  }
+  //if ret =0, the square is no longer an active obstacle square. Token can be moved. Else it's still an obstacle square and the user misses a turn
+  return ret;
 }
