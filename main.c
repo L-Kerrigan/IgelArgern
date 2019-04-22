@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   main.c
  * Author: Lucy
  *
@@ -25,6 +25,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 /*
  *
@@ -78,12 +79,8 @@ int main(int argc, char** argv) {
     //on the first column of the board
     place_tokens(board, players, numPlayers);
 
-
     //manages the turns of the game and identifies a winner
     play_game(board, players, numPlayers);
 
     return 0;
-
-
-
 }
