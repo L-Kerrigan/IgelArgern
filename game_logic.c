@@ -5,7 +5,7 @@
 #include <time.h>
 
 
-//Just to check if list is empty
+//Just to check if stack is empty. Returns 1 if stack is empty
 int isEmpty(tokenPtr sPtr){
   return sPtr == NULL;
 }
@@ -26,41 +26,40 @@ int push(tokenPtr *sPtr, int value){
 
     //This is for inserting a new element at the beginning of the stack
     if(prevPtr==NULL){ //Isn't this the part we need for only entering things in the top of the stack
-      newPtr->next=*sPtr;
-      *sPtr=newPtr;
-    }
-    else{ //Insert new node between current pointer and previous pointer
-      prevPtr->next=newPtr;
-      newPtr->next=currPtr;
-    }
+    newPtr->next=*sPtr;
+    *sPtr=newPtr;
   }
-  else{ //If something goes wrong with memory allocation
-    printf("%d not inserted. No memory was made available. \n", value);
+  else{ //Insert new token between current pointer and previous pointer
+    prevPtr->next=newPtr;
+    newPtr->next=currPtr;
   }
 }
-//The pop function also deletes all tokens of the same colour currently in the stack
+else{ //If something goes wrong with memory allocation
+  printf("%d not inserted. No memory was made available. \n", value);
+}
+}
+
 //Function to pop elements of stack. Inefficient but I can't figure out a better way right now
 int pop (tokenPtr *sPtr, int value){
   if(value == (*sPtr)->col){
-    tokenPtr tempPtr = *sPtr;
-    *sPtr = (*sPtr)->next;
-    free(tempPtr);
+    tokenPtr tempPtr = *sPtr; //Hold onto token being removed
+    *sPtr = (*sPtr)->next; //De-thread the token from the stack
+    free(tempPtr); //Free the tempPtr holding the removed value
   }
   else{
     tokenPtr prevPtr = *sPtr;
     tokenPtr currPtr = (*sPtr)->next;
 
     while(currPtr!=NULL && currPtr->col!=value){
-      prevPtr = currPtr;
+      prevPtr = currPtr; //These two lines make the stack point to the next token
       currPtr = currPtr->next;
     }
-    if(currPtr!=NULL){
-      tokenPtr tempPtr = currPtr;
+    if(currPtr!=NULL){ //To delete the token at currPtr
+      tokenPtr tempPtr = currPtr; //
       prevPtr->next=currPtr->next;
       return value;
     }
   }
-
   return '\0';
 }
 
@@ -161,7 +160,7 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
       }
     }
   }
-  print_board(board); //Prints the baord after all tokens are placed
+  print_board(board); //Prints the board after all tokens are placed
 }
 
 /*
@@ -234,20 +233,20 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
                 //Need to add something that asks the question again. Or just leave it and let them move forward
               }
             }
-              else{
-                push(&(board[tileRow+1][tileCol].stack), board[dice][tileNum].stack->col);
-                board[tileRow+1][tileCol].tokensOnSquare++; //Increments number of tokens on the square
+            else{
+              push(&(board[tileRow+1][tileCol].stack), board[dice][tileNum].stack->col);
+              board[tileRow+1][tileCol].tokensOnSquare++; //Increments number of tokens on the square
 
-                board[tileRow][tileCol].tokensOnSquare--; //Decrements number of tokens on the square
-                pop(&(board[tileRow][tileCol].stack), board[tileRow][tileCol].stack->col);
-              }
+              board[tileRow][tileCol].tokensOnSquare--; //Decrements number of tokens on the square
+              pop(&(board[tileRow][tileCol].stack), board[tileRow][tileCol].stack->col);
             }
-            //Need to change stack of tokens on this square to display the one beneath the one that just moved
-            push(&(board[dice][tileNum+1].stack), board[dice][tileNum].stack->col);
-            board[dice][tileNum+1].tokensOnSquare++; //Increments number of tokens on the square
+          }
+          //Need to change stack of tokens on this square to display the one beneath the one that just moved
+          push(&(board[dice][tileNum+1].stack), board[dice][tileNum].stack->col);
+          board[dice][tileNum+1].tokensOnSquare++; //Increments number of tokens on the square
 
-            board[dice][tileNum].tokensOnSquare--; //Decrements number of tokens on the square
-            pop(&(board[dice][tileNum].stack), board[dice][tileNum].stack->col);
+          board[dice][tileNum].tokensOnSquare--; //Decrements number of tokens on the square
+          pop(&(board[dice][tileNum].stack), board[dice][tileNum].stack->col);
 
         }
         else if (ans == 'N' || ans == 'n') { //If the player answers no, just move forward the token they chose before
