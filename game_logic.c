@@ -287,25 +287,19 @@ moveToken(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers)
 
 /*The function to be called whenever a token lands on its destination. It will check if said square is an obstacle,
 and if it is, it will take action. If not, nothing happens. */
-/*Maybe make this return a true/false value depending on whether the token can move,
-Then call the moveToken function in the play_game function if that token can be moved etc. */
 int obstacleSquares(square board[NUM_ROWS][NUM_COLUMNS], int rows, int columns){ //This function needs fixing
-  int ret=0;
-  for(int a=0;a<rows;a++){
+  int ret=0; //To hold the value to return
+  for(int a=0;a<rows;a++){ //Runs through all columns and rows before the obstacle square
     for(int b=0;b<columns;b++){
-      if((board[a][b].tokensOnSquare)>0){
-        //Implement something that says they can't move this token
-        //Call function to choose another token
-        ret++; //1=The square is an active obstacle square. Token can't be moved
-        //Currently this just starts from the beginning.
-        //It needs to give the option for the same player to choose another token. Make a new function?
+      if((board[a][b].tokensOnSquare)>0){ //Checks if any square before the obstacle square has a token on it still
+        ret++; //Incrementing ret to show there's a square before the obstacle square with a token on it
       }
     }
   }
-  if(ret!=0){
+  if(ret!=0){ //If ret is greater than 0, the square is an active obstacle square. Token can't be moved
     printf("You can't move this token yet. It's on an obstacle square.\n");
   }
-  else if(ret==0){
+  else if(ret==0){ //If ret =0, the square is no longer an active obstacle square. Token can be moved.
     printf("There are no tokens behind this one, so it can now move.\n");
     board[rows][columns].type = NORMAL; //Changes the obstacle square to a normal
   }
