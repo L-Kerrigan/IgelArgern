@@ -132,8 +132,7 @@ void print_board(square board[NUM_ROWS][NUM_COLUMNS]) {
 *        numPlayers - the number of players
 */
 void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
-  //Minimum number of tokens placed on a square in the first column of the board
-  int minTokens = 0;
+  int minTokens = 0; //Minimum number of tokens placed on a square in the first column of the board
   int squareSelected = 0; //Variable to hold the number of the square selected by the user
   int i, j; //Counters
 
@@ -142,29 +141,27 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
       printf("Player %d please choose a square.\n", j+1);
       scanf(" %d", &squareSelected); //Asks where the player wants to place their next token
 
-      if(squareSelected<0 || squareSelected>=6){
+      if(squareSelected<0 || squareSelected>=6){ //If the squareSelected is off the board, the player must choose again
         printf("That square isn't on the board. Pick again. \n");
-        j--;
+        j--; //Makes the player choose again by reducing the counter in the loop by 1
       }
       else{
-        if (board[squareSelected][0].tokensOnSquare==minTokens && board[squareSelected][0].stack->col != players[j].col) { //The following instructions add a token to a square.
-          //If there's a token already there it will be overwritten. This needs to be changed later
-          push(&(board[squareSelected][0].stack), players[j].col);
-          board[squareSelected][0].tokensOnSquare++;
+        if (board[squareSelected][0].tokensOnSquare==minTokens || board[squareSelected][0].stack->col != players[j].col) { //The following instructions add a token to a square.
+          push(&(board[squareSelected][0].stack), players[j].col); //Adds the token to the stack
+          board[squareSelected][0].tokensOnSquare++; //Increments the number of tokens on the square
 
-          //Updates the minimum number of tokens every time a multiple of (the number of players) tokens has been placed in the first col
           if (((numPlayers * i) + j + 1) % NUM_ROWS == 0) {
-            minTokens++;
+            minTokens++; //Updates the minimum number of tokens every time a multiple of (the number of players) tokens has been placed in the first column
           }
         }
         else{
           printf("That square has more than the minimum number of tokens, or there's a token of your colour already there. Pick again. \n");
-          j--;
+          j--; //Makes the player choose again by reducing the counter in the loop by 1
         }
       }
     }
   }
-  print_board(board);
+  print_board(board); //Prints the baord after all tokens are placed
 }
 
 /*
@@ -194,7 +191,7 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
         i--; //Rolls the dice again for the same player. Need to find a way to ask the question again. This method could be used for cheating
       }
       else if(board[dice][tileNum].type==OBSTACLE && (obstacleSquares(board, dice, tileNum)!=0)){ //Need to check if the tile the token is on is an obstacle, not the future position!!
-        printf("Sorry, you miss a turn!\n\n"); //Is this right?
+        printf("Sorry, you miss a turn!\n\n");
       }
       else{
         char ans;
@@ -219,7 +216,6 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
             printf("Press U for up or D for down.\n");
             scanf(" %c", &move);
             if (move == 'U' || move == 'u') { //This works to move it, but we need to ask which colour token the player wants to move
-              //This is just the code to move it
               if(tileRow=0){
                 printf("Sorry, you can't move this token further up.\n\n");
                 //Need to add something that asks the question again. Or just leave it and let them move forward
@@ -239,7 +235,6 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
               }
             }
               else{
-                //This is just the code to move it
                 push(&(board[tileRow+1][tileCol].stack), board[dice][tileNum].stack->col);
                 board[tileRow+1][tileCol].tokensOnSquare++; //Increments number of tokens on the square
 
@@ -256,7 +251,6 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
 
         }
         else if (ans == 'N' || ans == 'n') { //If the player answers no, just move forward the token they chose before
-          //Need to change stack of tokens on this square to display the one beneath the one that just moved
           push(&(board[dice][tileNum+1].stack), board[dice][tileNum].stack->col);
           board[dice][tileNum+1].tokensOnSquare++; //Increments number of tokens on the square
 
