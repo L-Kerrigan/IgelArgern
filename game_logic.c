@@ -23,20 +23,13 @@ int push(tokenPtr *sPtr, int value){
       prevPtr=currPtr;
       currPtr=currPtr->next;
     }
-
     //This is for inserting a new element at the beginning of the stack
-    if(prevPtr==NULL){ //Isn't this the part we need for only entering things in the top of the stack
     newPtr->next=*sPtr;
     *sPtr=newPtr;
   }
-  else{ //Insert new token between current pointer and previous pointer
-    prevPtr->next=newPtr;
-    newPtr->next=currPtr;
+  else{ //If something goes wrong with memory allocation
+    printf("%d not stacked. No memory was made available. \n", value);
   }
-}
-else{ //If something goes wrong with memory allocation
-  printf("%d not inserted. No memory was made available. \n", value);
-}
 }
 
 //Function to pop elements of stack. Inefficient but I can't figure out a better way right now
@@ -297,12 +290,12 @@ int obstacleSquares(square board[NUM_ROWS][NUM_COLUMNS], int rows, int columns){
     }
   }
   if(ret!=0){ //If ret is greater than 0, the square is an active obstacle square. Token can't be moved
-    printf("You can't move this token yet. It's on an obstacle square.\n");
-  }
-  else if(ret==0){ //If ret =0, the square is no longer an active obstacle square. Token can be moved.
-    printf("There are no tokens behind this one, so it can now move.\n");
-    board[rows][columns].type = NORMAL; //Changes the obstacle square to a normal
-  }
-  //if ret =0, the square is no longer an active obstacle square. Token can be moved. Else it's still an obstacle square and the user misses a turn
-  return ret;
+  printf("You can't move this token yet. It's on an obstacle square.\n");
+}
+else if(ret==0){ //If ret =0, the square is no longer an active obstacle square. Token can be moved.
+  printf("There are no tokens behind this one, so it can now move.\n");
+  board[rows][columns].type = NORMAL; //Changes the obstacle square to a normal
+}
+//if ret =0, the square is no longer an active obstacle square. Token can be moved. Else it's still an obstacle square and the user misses a turn
+return ret;
 }
