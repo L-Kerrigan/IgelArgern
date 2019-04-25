@@ -332,3 +332,15 @@ int obstacleSquares(square board[NUM_ROWS][NUM_COLUMNS], int rows, int columns){
   //if ret =0, the square is no longer an active obstacle square. Token can be moved. Else it's still an obstacle square and the user misses a turn
   return ret; //This function will act somewhat like a boolean (true/false) function, only with a little more to it
 }
+
+int winning_player(player players[], int numPlayers){
+    int i, j;//counters
+    int tf = 0;
+    for(i=0; i<numPlayer; i++){
+        if(players[i].tokensOnLastCol>=3){
+            tf++;
+            printf("Player %d wins!\n", i+1);
+        }
+    }
+    return tf;
+}
