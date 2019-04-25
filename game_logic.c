@@ -279,23 +279,23 @@ moveToken(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers)
 
 
 /*The function to be called whenever a token lands on its destination. It will check if said square is an obstacle,
-and if it is, it will take action. If not, nothing happens. */
+and if it is, it will take action. If not, nothing happens.*/
 int obstacleSquares(square board[NUM_ROWS][NUM_COLUMNS], int rows, int columns){ //This function needs fixing
-  int ret=0; //To hold the value to return
-  for(int a=0;a<rows;a++){ //Runs through all columns and rows before the obstacle square
+  int ret=0; //The variable to be returned at the end of the function
+  for(int a=0;a<6;a++){ //Runs through all the squares before the obstacle squares to check for other tokens
     for(int b=0;b<columns;b++){
-      if((board[a][b].tokensOnSquare)>0){ //Checks if any square before the obstacle square has a token on it still
-        ret++; //Incrementing ret to show there's a square before the obstacle square with a token on it
+      if((board[a][b].tokensOnSquare)>0){
+        ret++; //ret>0=The square is an active obstacle square. Token can't be moved
       }
     }
   }
-  if(ret!=0){ //If ret is greater than 0, the square is an active obstacle square. Token can't be moved
-  printf("You can't move this token yet. It's on an obstacle square.\n");
-}
-else if(ret==0){ //If ret =0, the square is no longer an active obstacle square. Token can be moved.
-  printf("There are no tokens behind this one, so it can now move.\n");
-  board[rows][columns].type = NORMAL; //Changes the obstacle square to a normal
-}
-//if ret =0, the square is no longer an active obstacle square. Token can be moved. Else it's still an obstacle square and the user misses a turn
-return ret;
+  if(ret!=0){
+    printf("You can't move this token yet. It's on an obstacle square.\n");
+  }
+  else if(ret==0){
+    printf("There are no tokens behind this one, so it can now move.\n");
+    board[rows][columns].type = NORMAL; //Changes the obstacle square to a normal
+  }
+  //if ret =0, the square is no longer an active obstacle square. Token can be moved. Else it's still an obstacle square and the user misses a turn
+  return ret; //This function will act somewhat like a boolean (true/false) function, only with a little more to it
 }
