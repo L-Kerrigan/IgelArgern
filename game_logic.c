@@ -338,9 +338,9 @@ int winning_player(player players[], int numPlayers){
     int tf = 0;
     for(i=0; i<numPlayer; i++){
         if(players[i].tokensOnLastCol>=3){
-            tf++;
-            printf("Player %d wins!\n", i+1);
+            tf++; //if a player has 3 or more tokens in the last column then tf is incremented 
+            printf("Player %d wins!\n", i+1);//prints player who won
         }
     }
-    return tf;
+    return tf;//Returns 0 or a value greater than 0 depending on if a player has 3 tokens or not
 }
