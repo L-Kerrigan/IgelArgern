@@ -1,4 +1,4 @@
-Updated 24/04/19 - Check list for the game:
+Updated 25/04/19 - Check list for the game:
 
  - Initialise the board -(Done)
  Obstacle square positions already decided.
@@ -16,10 +16,9 @@ Updated 24/04/19 - Check list for the game:
  - Add push/pop functions for the stack -(Done)
  These functions will be used to add/take away tokens from each square as they move
 
- - Make a function to allow players to place tokens at start of game (Not completed)
+ - Make a function to allow players to place tokens at start of game -(Done, could be more efficient)
  I got a lot of help from the slides for this so we may have to change it a bit later if we have time.
  Over half is my own code though, so it should be fine.
- It works, but still lets the player place their own tokens on top of each other which shouldn't be allowed to happen
 
  - Make a function to play the game -(Lucy is doing this)
  I suggest we split up this function into pieces because it looks like it could get very big very quickly. Doing this might also just make it easier to read.
@@ -32,11 +31,11 @@ Updated 24/04/19 - Check list for the game:
  - Edit main to put it all together -(Mostly done. Can't really be 100% finished until we've created all the other functions)
  There are some function calls in here already to start the process, but as we make our own functions we will need to add them here in the correct order.
 
- - Implement the function to announce the winner -(Christelle is doing this - Pretty much done)
+ - Implement the function to announce the winner -(Christelle is doing this - Done)
  This should keep track of how many tokens of each colour arrive at the far side of the board.
  Once 3 tokens of the same colour reach the same side of the board, announce the player whose colour that is as the winner.
 
- - Function to add to each player's tokensOnLastCol counter (Attempted. Currently doesn't work)
+ - Function to add to each player's tokensOnLastCol counter -(Done)
  We need to be able to count how many tokens of each colour are o the last column.
  This number then needs to be added to the corresponding player's tokensOnLastCol counter.
  My attempt allows the game to only run for 1 round before deciding the winner.
