@@ -165,118 +165,151 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
 */
 
 void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
-  do{
-    for (int i = 0; i < numPlayers; i++) {
-      srand(time(NULL)); //Randomising a number for the dice roll
-      int dice = (rand() % 6);
+  for (int i = 0; i < numPlayers; i++) { //Runs through each player to give them a turn
+    do{
+      srand(time(NULL));
+      int dice = (rand() % 6); //Randomising a number for the dice roll
+
       //This may be in the wrong order. Sidestep first then move forward???
       int tileNum; //To hold the selected tile number
       printf("Player %d, you rolled a %d. \n", i+1, dice);
-      printf("Which token will you move on row %d? Type the number of the column it's on. \n", dice); //Has to be on the row the dice rolled
+      printf("Which token will you move on row %d? Type the number of the tile it's on. \n", dice);
       scanf("%d", &tileNum); //Player selects a the tile on which the token they want to move is on
       if (tileNum < 0 || tileNum >= 8) { //Checks if the tile selected is within the range of the columns of the board
         printf("This is an invalid tile number. \n\n");
         i--; //Rolls the dice again for the same player
       } //Latter half of that statement shouldn't be required
       else if(board[dice][tileNum].tokensOnSquare==0 || isEmpty(board[dice][tileNum].stack)) {
-        printf("There are no tokens on this square. Choose again. \n\n"); //Roll again?
-        i--; //Rolls the dice again for the same player. Need to find a way to ask the question again. This method could be used for cheating
+        printf("There are no tokens on this square. \n\n");
+        //Need to find a way to ask the question again
       }
       else if(board[dice][tileNum].type==OBSTACLE && (obstacleSquares(board, dice, tileNum)!=0)){ //Need to check if the tile the token is on is an obstacle, not the future position!!
         printf("Sorry, you miss a turn!\n\n");
       }
       else{
-        char ans;
+        char ans; //To hold the answer the user gives to the following question
         printf("Will you move your own token up or down? Enter Y or N.\n");
         scanf(" %c", &ans); //Takes in whether the player wants to move one of their own tokens up or down
 
         if (ans == 'Y' || ans == 'y') {
           int tileCol, tileRow; //To hold the number of the tile their own token is on that the player wants to move
           printf("Which token would you like to move? Type the row and column. \n");
-          scanf(" %d %d", &tileRow, &tileCol); //Takes in location of token to be moved
-          //This if statement also currently doesn't work, as above
+          scanf(" %d%d", &tileRow, &tileCol); //Takes in location of token to be moved
           if(board[tileRow][tileCol].tokensOnSquare==0 || isEmpty(board[tileRow][tileCol].stack)) {
-            printf("There are no tokens on this square. Choose again. \n\n");
+            printf("There are no tokens on this square. \n\n");
+            //Again, need to figure out a way to ask the question
           }
           else if(board[tileRow][tileCol].stack->col != players[i].col)
           {
             printf("This is not your token.\n\n");
             //Again, need to figure out a way to ask the question
           }
+
+
           else{
             char move;
             printf("Press U for up or D for down.\n");
-            scanf(" %c", &move);
+            scanf(" %c", &move); //Takes in whether the user wishes to move their own token up or down
+
             if (move == 'U' || move == 'u') { //This works to move it, but we need to ask which colour token the player wants to move
-              if(tileRow=0){
+              if(tileRow==0){
                 printf("Sorry, you can't move this token further up.\n\n");
                 //Need to add something that asks the question again. Or just leave it and let them move forward
               }
               else{
-                push(&(board[tileRow-1][tileCol].stack), board[dice][tileNum].stack->col);
+                push(&(board[tileRow-1][tileCol].stack), board[tileRow-1][tileCol].stack->col); //Adds token to the stack
                 board[tileRow-1][tileCol].tokensOnSquare++; //Increments number of tokens on the square
 
                 board[tileRow][tileCol].tokensOnSquare--; //Decrements number of tokens on the square
-                pop(&(board[tileRow][tileCol].stack), board[tileRow][tileCol].stack->col);
+                pop(&(board[tileRow][tileCol].stack), board[tileRow][tileCol].stack->col); //Deletes token from stack
               }
             }
+
+
             else if (move == 'D' || move == 'd') {
-              if(tileRow=5){
+              if(tileRow==5){
                 printf("Sorry, you can't move this token further down.\n\n");
                 //Need to add something that asks the question again. Or just leave it and let them move forward
               }
-            }
-            else{
-              push(&(board[tileRow+1][tileCol].stack), board[dice][tileNum].stack->col);
-              board[tileRow+1][tileCol].tokensOnSquare++; //Increments number of tokens on the square
+              else{
+                push(&(board[tileRow+1][tileCol].stack), board[tileRow+1][tileCol].stack->col); //Adds token to the stack
+                board[tileRow+1][tileCol].tokensOnSquare++; //Increments number of tokens on the square
 
-              board[tileRow][tileCol].tokensOnSquare--; //Decrements number of tokens on the square
-              pop(&(board[tileRow][tileCol].stack), board[tileRow][tileCol].stack->col);
+                board[tileRow][tileCol].tokensOnSquare--; //Decrements number of tokens on the square
+                pop(&(board[tileRow][tileCol].stack), board[tileRow][tileCol].stack->col); //Deletes token from stack
+              }
+            }
+
+            push(&(board[dice][tileNum+1].stack), board[dice][tileNum].stack->col); //Adds token to the stack
+            board[dice][tileNum+1].tokensOnSquare++; //Increments number of tokens on the square
+
+            board[dice][tileNum].tokensOnSquare--; //Decrements number of tokens on the square
+            pop(&(board[dice][tileNum].stack), board[dice][tileNum].stack->col); //Deletes token from stack
+
+            if((tileNum+1)==8){
+              checkLastCol(board, dice, players); //Calls function to check if a token has been added to the last column this turn. Doesn't work quite right
             }
           }
-          //Need to change stack of tokens on this square to display the one beneath the one that just moved
-          push(&(board[dice][tileNum+1].stack), board[dice][tileNum].stack->col);
-          board[dice][tileNum+1].tokensOnSquare++; //Increments number of tokens on the square
-
-          board[dice][tileNum].tokensOnSquare--; //Decrements number of tokens on the square
-          pop(&(board[dice][tileNum].stack), board[dice][tileNum].stack->col);
-
         }
+
+
         else if (ans == 'N' || ans == 'n') { //If the player answers no, just move forward the token they chose before
-          push(&(board[dice][tileNum+1].stack), board[dice][tileNum].stack->col);
+          push(&(board[dice][tileNum+1].stack), board[dice][tileNum].stack->col); //Adds token to the stack
           board[dice][tileNum+1].tokensOnSquare++; //Increments number of tokens on the square
 
           board[dice][tileNum].tokensOnSquare--; //Decrements number of tokens on the square
-          pop(&(board[dice][tileNum].stack), board[dice][tileNum].stack->col);
+          pop(&(board[dice][tileNum].stack), board[dice][tileNum].stack->col); //Deletes token from stack
+
+          if((tileNum+1)==8){
+            checkLastCol(board, dice, players); //Calls function to check if a token has been added to the last column this turn. Doesn't work quite right
+          }
         }
+
+
         else{
-          printf("Invalid answer. \n\n");
+          printf("Invalid answer. \n\n"); //If they don't give a proper answer, they only get to move their selected token forward
         }
         print_board(board);//Prints board at the end of each round
-
       }
+    }while((winning_player(players, numPlayers)==0)); //Keeps code running until a player has 3 tokens in the last column
+    if((winning_player(players, numPlayers)!=0)){ //Just to make sure the for loop breaks after the winner is decided
+      break;
     }
-  }while((winning_player(players, numPlayers)==0)); //Keeps code running until a player has 3 tokens in the last column
+  }
 }
 
-//Divide this function up:
-//One function to choose the token to move
-//Another to move the token once it's confirmed that token isn't on an obstacle square, etc.
-/*
-void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
-chooseToken(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers);
-if(obstacleSquares(board[int i][int j])==1){
-chooseToken(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers);
-//Will this work if the player attempts to chose mulitple unmoveable tokens in a row?
-}
-else{
-moveToken(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers);
-}
-//Currently these functions don't get the info they need and aren't in the correct order
-//Needs to call all the functions that play the game and pass the appropriate info. Acts like a mini-main function
-} */
 
+void checkLastCol(square board[NUM_ROWS][NUM_COLUMNS], int row, player players[]){
+  //Switch statement to increment tokensOnLastCol variable for the player corresponding to the token at the top of the stack (the newest token)
+  switch(board[row][8].stack->col){
+    case 0:
+    players[0].tokensOnLastCol++;
+    break;
 
+    case 1:
+    players[1].tokensOnLastCol++;
+    break;
+
+    case 2:
+    players[2].tokensOnLastCol++;
+    break;
+
+    case 3:
+    players[3].tokensOnLastCol++;
+    break;
+
+    case 4:
+    players[4].tokensOnLastCol++;
+    break;
+
+    case 5:
+    players[5].tokensOnLastCol++;
+    break;
+
+    default:
+    break;
+  }
+}
 
 /*The function to be called whenever a token lands on its destination. It will check if said square is an obstacle,
 and if it is, it will take action. If not, nothing happens.*/
