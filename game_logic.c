@@ -75,7 +75,7 @@ char print_token(token *t) {
 }
 
 
-
+//Function to print a line
 void printLine() {
   printf("   -------------------------------------\n");
 }
@@ -115,6 +115,7 @@ void print_board(square board[NUM_ROWS][NUM_COLUMNS]) {
   //prints the number of the columns at the end of the board
   printf("     0   1   2   3   4   5   6   7   8\n");
 }
+
 
 /*
 * Place tokens in the first column of the board
