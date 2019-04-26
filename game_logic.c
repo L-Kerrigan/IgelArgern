@@ -346,7 +346,7 @@ int obstacleSquares(square board[NUM_ROWS][NUM_COLUMNS], int rows, int columns){
 int winning_player(player players[], int numPlayers){
     int i, j; //Counters
     int tf = 0;
-    for(i=0; i<numPlayer; i++){ //Runs through and checks each player's tokensOnLastCol
+    for(i=0; i<numPlayers; i++){ //Runs through and checks each player's tokensOnLastCol
         if(players[i].tokensOnLastCol>=3){
             tf++; //If a player has 3 or more tokens in the last column then tf is incremented
             printf("Player %d wins!\n", i+1); //Prints player who won
@@ -359,4 +359,7 @@ int winning_player(player players[], int numPlayers){
 void moveTokenForward(square board[NUM_ROWS][NUM_COLUMNS], int row, int column){
   push(&(board[row][column+1].stack), board[row][column].stack->col); //Adds token to the stack
   board[row][column+1].tokensOnSquare++; //Increments number of tokens on the square
+
+  board[row][column].tokensOnSquare--; //Decrements number of tokens on the square
+  pop(&(board[row][column].stack), board[row][column].stack->col); //Deletes token from stack
 }
