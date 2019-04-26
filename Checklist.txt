@@ -1,4 +1,4 @@
-Updated 25/04/19 - Check list for the game:
+Updated 26/04/19 - Check list for the game:
 
  - Initialise the board -(Done)
  Obstacle square positions already decided.
@@ -20,7 +20,7 @@ Updated 25/04/19 - Check list for the game:
  I got a lot of help from the slides for this so we may have to change it a bit later if we have time.
  Over half is my own code though, so it should be fine.
 
- - Make a function to play the game -(Lucy is doing this)
+ - Make a function to play the game -(Lucy is doing this - Done)
  I suggest we split up this function into pieces because it looks like it could get very big very quickly. Doing this might also just make it easier to read.
  Nearly finished, but not quite working. Eg: the players can't move their tokens up/down before moving another token forward
 
@@ -28,7 +28,7 @@ Updated 25/04/19 - Check list for the game:
  Basically this is moving the functions from the c files to the libraries so that when they're called, all you have to do is write "function();" like you would for "printf"
  Make sure to add "#include libraryName" when you're running the code after, or the complier won't be able to find the functions and just give errors.
 
- - Edit main to put it all together -(Mostly done. Can't really be 100% finished until we've created all the other functions)
+ - Edit main to put it all together -(Done)
  There are some function calls in here already to start the process, but as we make our own functions we will need to add them here in the correct order.
 
  - Implement the function to announce the winner -(Christelle is doing this - Done)
