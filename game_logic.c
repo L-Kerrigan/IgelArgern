@@ -127,34 +127,49 @@ void print_board(square board[NUM_ROWS][NUM_COLUMNS]) {
 void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
   int minTokens = 0; //Minimum number of tokens placed on a square in the first column of the board
   int squareSelected = 0; //Variable to hold the number of the square selected by the user
-  int i, j; //Counters
+  int i, j; //Counters for loops
 
-  for (i = 0; i < 4; i++) { //These loops ensure that each player places all their tokens on the board
-    for (j = 0; j < numPlayers; j++) {
-      printf("Player %d please choose a square.\n", j+1);
+  for (i = 0; i < 4; i++) { //This loop ensures that all tokens are placed on the board
+    for (j = 0; j < numPlayers; j++) { //This loop ensures that all players get a chance to place on the board
+      printf("%s, please choose a square.\n", players[j].name);
       scanf(" %d", &squareSelected); //Asks where the player wants to place their next token
 
       if(squareSelected<0 || squareSelected>=6){ //If the squareSelected is off the board, the player must choose again
         printf("That square isn't on the board. Pick again. \n");
         j--; //Makes the player choose again by reducing the counter in the loop by 1
       }
-      else{
-        if (board[squareSelected][0].tokensOnSquare==minTokens || board[squareSelected][0].stack->col != players[j].col) { //The following instructions add a token to a square.
-          push(&(board[squareSelected][0].stack), players[j].col); //Adds the token to the stack
-          board[squareSelected][0].tokensOnSquare++; //Increments the number of tokens on the square
 
-          if (((numPlayers * i) + j + 1) % NUM_ROWS == 0) {
-            minTokens++; //Updates the minimum number of tokens every time a multiple of (the number of players) tokens has been placed in the first column
+      else{
+        if(board[squareSelected][0].tokensOnSquare==minTokens) {
+          if(minTokens==0){
+            push(&(board[squareSelected][0].stack), players[j].col); //Adds the token to the stack
+            board[squareSelected][0].tokensOnSquare++; //Increments the number of tokens on the square
+
+            if (((numPlayers * i) + j + 1) % NUM_ROWS == 0) {
+              minTokens++; //Updates the minimum number of tokens every time a multiple of (the number of players) tokens has been placed in the first column
+            }
+          }
+          else if(board[squareSelected][0].stack->col != players[j].col) {
+            push(&(board[squareSelected][0].stack), players[j].col); //Adds the token to the stack
+            board[squareSelected][0].tokensOnSquare++; //Increments the number of tokens on the square
+
+            if (((numPlayers * i) + j + 1) % NUM_ROWS == 0) {
+              minTokens++; //Updates the minimum number of tokens every time a multiple of (the number of players) tokens has been placed in the first column
+            }
+          }
+          else{
+            printf("There's a token of your colour already there. Pick again. \n\n");
+            j--;  //Makes the player choose again by reducing the counter in the loop by 1
           }
         }
         else{
-          printf("That square has more than the minimum number of tokens, or there's a token of your colour already there. Pick again. \n");
+          printf("That square has more than the minimum number of tokens. Pick again. \n\n");
           j--; //Makes the player choose again by reducing the counter in the loop by 1
         }
       }
     }
   }
-  print_board(board); //Prints the board after all tokens are placed
+  print_board(board); //Prints the baord after all tokens are placed
 }
 
 /*
@@ -331,7 +346,7 @@ int obstacleSquares(square board[NUM_ROWS][NUM_COLUMNS], int rows, int columns){
 int winning_player(player players[], int numPlayers){
     int i, j; //Counters
     int tf = 0;
-    for(i=0; i<numPlayer; i++){
+    for(i=0; i<numPlayer; i++){ //Runs through and checks each player's tokensOnLastCol
         if(players[i].tokensOnLastCol>=3){
             tf++; //If a player has 3 or more tokens in the last column then tf is incremented
             printf("Player %d wins!\n", i+1); //Prints player who won
