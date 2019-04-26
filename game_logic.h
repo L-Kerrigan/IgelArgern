@@ -1,16 +1,3 @@
-#ifndef GAME_LOGIC_H
-#define GAME_LOGIC_H
-
-#ifdef __cplusplus
-extern "C" {
-  #endif
-
-  #ifdef __cplusplus
-}
-#endif
-
-#endif /* GAME_LOGIC_H */
-
 //To check if the stack is empty. Returns 1 if the stack is empty
 int isEmpty(tokenPtr sPtr);
 
@@ -69,6 +56,9 @@ int obstacleSquares(square board[NUM_ROWS][NUM_COLUMNS], int rows, int columns);
 
 //A function to check if any player has 3 tokens on the last column at the end of each round
 int winning_player(player players[], int numPlayers);
+
+//A function to allow the player to choose which token to move on the row the dice rolls
+int takeTurn(square board[NUM_ROWS][NUM_COLUMNS], player players[], int dice, int num);
 
 //A function to move a token forward. Just to make things neater
 void moveTokenForward(square board[NUM_ROWS][NUM_COLUMNS], int row, int column);
