@@ -166,27 +166,29 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
 */
 
 void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
-  for (int i = 0; i < numPlayers; i++) { //Runs through each player to give them a turn
-    do{
+  do{
+    for (int i = 0; i < numPlayers; i++) { //Runs through each player to give them a turn
       srand(time(NULL));
-      int dice = (rand() % 6); //Randomising a number for the dice roll
+      int dice = (rand() % 6); //Randomising a number for the dice roll. Yes I know die don't generally have number 0, but there's a row 0, so I didn't correct this
 
       //This may be in the wrong order. Sidestep first then move forward???
       int tileNum; //To hold the selected tile number
-      printf("Player %d, you rolled a %d. \n", i+1, dice);
+      printf("%s, you rolled a %d. \n", players[i].name, dice);
       printf("Which token will you move on row %d? Type the number of the tile it's on. \n", dice);
       scanf("%d", &tileNum); //Player selects a the tile on which the token they want to move is on
       if (tileNum < 0 || tileNum >= 8) { //Checks if the tile selected is within the range of the columns of the board
         printf("This is an invalid tile number. \n\n");
-        i--; //Rolls the dice again for the same player
-      } //Latter half of that statement shouldn't be required
+        //Need to find a way to ask the question again
+      } //Latter half of this statement shouldn't be required
       else if(board[dice][tileNum].tokensOnSquare==0 || isEmpty(board[dice][tileNum].stack)) {
         printf("There are no tokens on this square. \n\n");
         //Need to find a way to ask the question again
       }
-      else if(board[dice][tileNum].type==OBSTACLE && (obstacleSquares(board, dice, tileNum)!=0)){ //Need to check if the tile the token is on is an obstacle, not the future position!!
+      else if(board[dice][tileNum].type==OBSTACLE && (obstacleSquares(board, dice, tileNum)!=0)){
         printf("Sorry, you miss a turn!\n\n");
       }
+
+
       else{
         char ans; //To hold the answer the user gives to the following question
         printf("Will you move your own token up or down? Enter Y or N.\n");
@@ -198,12 +200,17 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
           scanf(" %d%d", &tileRow, &tileCol); //Takes in location of token to be moved
           if(board[tileRow][tileCol].tokensOnSquare==0 || isEmpty(board[tileRow][tileCol].stack)) {
             printf("There are no tokens on this square. \n\n");
+            moveTokenForward(board, dice, tileNum);
             //Again, need to figure out a way to ask the question
           }
           else if(board[tileRow][tileCol].stack->col != players[i].col)
           {
             printf("This is not your token.\n\n");
+            moveTokenForward(board, dice, tileNum);
             //Again, need to figure out a way to ask the question
+          }
+          else if(board[tileRow][tileCol].type==OBSTACLE && (obstacleSquares(board, tileRow, tileCol)!=0)){
+            moveTokenForward(board, dice, tileNum);
           }
 
 
@@ -213,12 +220,12 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
             scanf(" %c", &move); //Takes in whether the user wishes to move their own token up or down
 
             if (move == 'U' || move == 'u') { //This works to move it, but we need to ask which colour token the player wants to move
-              if(tileRow==0){
+              if(tileRow<=0){
                 printf("Sorry, you can't move this token further up.\n\n");
                 //Need to add something that asks the question again. Or just leave it and let them move forward
               }
-              else{
-                push(&(board[tileRow-1][tileCol].stack), board[tileRow-1][tileCol].stack->col); //Adds token to the stack
+              else if(tileRow>0){
+                push(&(board[tileRow-1][tileCol].stack), players[i].col); //Adds token to the stack
                 board[tileRow-1][tileCol].tokensOnSquare++; //Increments number of tokens on the square
 
                 board[tileRow][tileCol].tokensOnSquare--; //Decrements number of tokens on the square
@@ -228,24 +235,19 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
 
 
             else if (move == 'D' || move == 'd') {
-              if(tileRow==5){
+              if(tileRow>=5){
                 printf("Sorry, you can't move this token further down.\n\n");
                 //Need to add something that asks the question again. Or just leave it and let them move forward
               }
-              else{
-                push(&(board[tileRow+1][tileCol].stack), board[tileRow+1][tileCol].stack->col); //Adds token to the stack
+              else if(tileRow<5){
+                push(&(board[tileRow+1][tileCol].stack), players[i].col); //Adds token to the stack
                 board[tileRow+1][tileCol].tokensOnSquare++; //Increments number of tokens on the square
 
                 board[tileRow][tileCol].tokensOnSquare--; //Decrements number of tokens on the square
                 pop(&(board[tileRow][tileCol].stack), board[tileRow][tileCol].stack->col); //Deletes token from stack
               }
             }
-
-            push(&(board[dice][tileNum+1].stack), board[dice][tileNum].stack->col); //Adds token to the stack
-            board[dice][tileNum+1].tokensOnSquare++; //Increments number of tokens on the square
-
-            board[dice][tileNum].tokensOnSquare--; //Decrements number of tokens on the square
-            pop(&(board[dice][tileNum].stack), board[dice][tileNum].stack->col); //Deletes token from stack
+            moveTokenForward(board, dice, tileNum);
 
             if((tileNum+1)==8){
               checkLastCol(board, dice, players); //Calls function to check if a token has been added to the last column this turn. Doesn't work quite right
@@ -255,28 +257,20 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
 
 
         else if (ans == 'N' || ans == 'n') { //If the player answers no, just move forward the token they chose before
-          push(&(board[dice][tileNum+1].stack), board[dice][tileNum].stack->col); //Adds token to the stack
-          board[dice][tileNum+1].tokensOnSquare++; //Increments number of tokens on the square
-
-          board[dice][tileNum].tokensOnSquare--; //Decrements number of tokens on the square
-          pop(&(board[dice][tileNum].stack), board[dice][tileNum].stack->col); //Deletes token from stack
-
+          moveTokenForward(board, dice, tileNum);
           if((tileNum+1)==8){
             checkLastCol(board, dice, players); //Calls function to check if a token has been added to the last column this turn. Doesn't work quite right
           }
         }
 
-
         else{
           printf("Invalid answer. \n\n"); //If they don't give a proper answer, they only get to move their selected token forward
         }
+
         print_board(board);//Prints board at the end of each round
       }
-    }while((winning_player(players, numPlayers)==0)); //Keeps code running until a player has 3 tokens in the last column
-    if((winning_player(players, numPlayers)!=0)){ //Just to make sure the for loop breaks after the winner is decided
-      break;
     }
-  }
+  }while((winning_player(players, numPlayers)==0)); //Keeps code running until a player has 3 tokens in the last column
 }
 
 
@@ -344,4 +338,10 @@ int winning_player(player players[], int numPlayers){
         }
     }
     return tf;//Returns 0 or a value greater than 0 depending on if a player has 3 tokens on the last column or not
+}
+
+//Just a function to neaten up the process of moving a token forward
+void moveTokenForward(square board[NUM_ROWS][NUM_COLUMNS], int row, int column){
+  push(&(board[row][column+1].stack), board[row][column].stack->col); //Adds token to the stack
+  board[row][column+1].tokensOnSquare++; //Increments number of tokens on the square
 }
