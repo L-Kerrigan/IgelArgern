@@ -1,27 +1,3 @@
-#ifndef GAME_INIT_H
-#define GAME_INIT_H
-
-#ifdef __cplusplus
-extern "C" {
-  #endif
-
-
-
-
-  #ifdef __cplusplus
-}
-#endif
-
-
-#endif /* GAME_INIT_H */
-
-
-//number of rows of the board
-#define NUM_ROWS 6
-//number of columns of the board
-#define NUM_COLUMNS 9
-
-
 //types of squares
 enum stype {
   NORMAL, OBSTACLE
