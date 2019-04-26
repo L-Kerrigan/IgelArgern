@@ -14,13 +14,6 @@ extern "C" {
 
 
 #endif /* GAME_INIT_H */
-/*
-* File:   newfile.h
-* Author: lpasqua
-*
-* Created on 06 March 2019, 12:18
-*/
-
 
 
 //number of rows of the board
@@ -30,27 +23,24 @@ extern "C" {
 
 
 //types of squares
-
 enum stype {
   NORMAL, OBSTACLE
 };
 
 //colors of tokens
-
 enum color {
   RED, BLU, GREEN, YELLOW, PINK, ORANGE
 };
 
 //defines a token.
-//Note each token can be associated with a color
-
 typedef struct token {
   enum color col;
   struct token *next;
 } token;
 
-//Defines a square of the board.
+typedef token *tokenPtr; //Synonym for token*. This is for use in the stack
 
+//Defines a square of the board.
 typedef struct square {
   //A square can be a NORMAL or an OBSTACLE square
   enum stype type;
@@ -60,7 +50,7 @@ typedef struct square {
   int tokensOnSquare;
 } square;
 
-
+//Defines a player
 typedef struct player {
   char name[30];
   enum color col;
