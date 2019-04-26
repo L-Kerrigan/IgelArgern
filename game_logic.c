@@ -48,7 +48,7 @@ int pop (tokenPtr *sPtr, int value){
       currPtr = currPtr->next;
     }
     if(currPtr!=NULL){ //To delete the token at currPtr
-      tokenPtr tempPtr = currPtr; //
+      tokenPtr tempPtr = currPtr;
       prevPtr->next=currPtr->next;
       return value;
     }
@@ -312,8 +312,8 @@ void checkLastCol(square board[NUM_ROWS][NUM_COLUMNS], int row, player players[]
   }
 }
 
-/*The function to be called whenever a token lands on its destination. It will check if said square is an obstacle,
-and if it is, it will take action. If not, nothing happens.*/
+/*The function to be called whenever a token tries to move from an obstacle square. It will check if said square is still an obstacle,
+and if it is, it will take action. If not, the obstacle square becomes a normal square.*/
 int obstacleSquares(square board[NUM_ROWS][NUM_COLUMNS], int rows, int columns){ //This function needs fixing
   int ret=0; //The variable to be returned at the end of the function
   for(int a=0;a<6;a++){ //Runs through all the squares before the obstacle squares to check for other tokens
@@ -335,13 +335,13 @@ int obstacleSquares(square board[NUM_ROWS][NUM_COLUMNS], int rows, int columns){
 }
 
 int winning_player(player players[], int numPlayers){
-    int i, j;//counters
+    int i, j; //Counters
     int tf = 0;
     for(i=0; i<numPlayer; i++){
         if(players[i].tokensOnLastCol>=3){
-            tf++; //if a player has 3 or more tokens in the last column then tf is incremented 
-            printf("Player %d wins!\n", i+1);//prints player who won
+            tf++; //If a player has 3 or more tokens in the last column then tf is incremented
+            printf("Player %d wins!\n", i+1); //Prints player who won
         }
     }
-    return tf;//Returns 0 or a value greater than 0 depending on if a player has 3 tokens or not
+    return tf;//Returns 0 or a value greater than 0 depending on if a player has 3 tokens on the last column or not
 }
