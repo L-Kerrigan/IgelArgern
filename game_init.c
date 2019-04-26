@@ -1,5 +1,4 @@
 #include "game_init.h"
-#include "game_logic.h"
 #include <stdio.h>
 
 
@@ -39,7 +38,7 @@ int initialize_players(player players[]) {
   int i, ans; //i is a counter for the loop. ans holds the number of players inputted by the user for the time being
 
   printf("How many players are there? \n"); //Can't figure out how to use the same method for counting players as used in the facebook project due to the presence of structs
-  scanf(" %d%", &ans); //The %*c just gets rid of the newline character without assigning it anywhere
+  scanf(" %d", &ans); //The %*c just gets rid of the newline character without assigning it anywhere
 
   for (i=0;i<ans;i++) {
     printf("%s", "Input the next Player's name: \n"); //Inputting each player's name
